@@ -3,7 +3,8 @@ package br.com.fiap.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import jakarta.enterprise.context.ApplicationScoped;
+@ApplicationScoped
 public class ConnectionFactory {
     public static Connection obterConexao(){
         Connection conexao = null;

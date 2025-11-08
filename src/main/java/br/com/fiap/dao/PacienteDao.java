@@ -10,7 +10,8 @@ import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import jakarta.enterprise.context.ApplicationScoped;
+@ApplicationScoped
 public class PacienteDao {
     private Connection conexao;
     public void cadastrar(Paciente paciente) throws SQLException{

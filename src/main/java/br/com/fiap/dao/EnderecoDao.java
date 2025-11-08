@@ -5,7 +5,8 @@ import br.com.fiap.models.Endereco;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import jakarta.enterprise.context.ApplicationScoped;
+@ApplicationScoped
 public class EnderecoDao {
     private Connection conexao;
 

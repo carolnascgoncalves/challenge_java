@@ -4,7 +4,8 @@ import java.sql.*;
 import br.com.fiap.dto.*;
 import br.com.fiap.models.*;
 import br.com.fiap.dao.*;
-
+import jakarta.enterprise.context.ApplicationScoped;
+@ApplicationScoped
 public class EmissaoDao {
     private Connection conexao;
 

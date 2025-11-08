@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
+@ApplicationScoped
 public class ConsultaDao {
     private Connection conexao;
 
