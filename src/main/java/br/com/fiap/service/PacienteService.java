@@ -4,6 +4,7 @@ import br.com.fiap.dao.PacienteDao;
 import br.com.fiap.dto.PacienteCadastroDto;
 import br.com.fiap.dto.PacienteLoginDto;
 import br.com.fiap.dto.PacienteMostrarDto;
+import br.com.fiap.models.Paciente;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -21,7 +22,7 @@ public class PacienteService {
         return pacienteDao.mostrarInfos(id);
     }
 
-    public String login(PacienteLoginDto dto){
+    public Paciente login(PacienteLoginDto dto){
         return pacienteDao.login(dto.convertToPaciente(dto));
     }
 

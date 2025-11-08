@@ -3,6 +3,7 @@ package br.com.fiap.resource;
 import br.com.fiap.dto.PacienteCadastroDto;
 import br.com.fiap.dto.PacienteLoginDto;
 import br.com.fiap.dto.PacienteMostrarDto;
+import br.com.fiap.models.Paciente;
 import br.com.fiap.service.PacienteService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -56,20 +57,15 @@ public class PacienteResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login (PacienteLoginDto usuario){
-        String mensagem = pacienteService.login(usuario);
+        Paciente paciente = pacienteService.login(usuario);
 
-        if(mensagem.equals("Usuário logado com sucesso")){
-            return Response.ok().entity(mensagem).build();
-        }
-        else if(mensagem.equals( "Usuário e/ou senha inválidos")){
+        if (paciente == null) {
             return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(mensagem)
+                    .entity("{\"mensagem\": \"Usuário e/ou senha inválidos\"}")
                     .build();
         }
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Erro ao autenticar usuário")
-                .build();
+        return Response.ok(paciente).build();
     }
 
     @GET

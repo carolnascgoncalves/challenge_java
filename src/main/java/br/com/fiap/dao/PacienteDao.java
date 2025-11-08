@@ -63,26 +63,43 @@ public class PacienteDao {
         }
     }
 
-    public String login(Paciente paciente){
+    public Paciente login(Paciente paciente){
+        EnderecoDao endDao = new EnderecoDao();
+        Paciente pacienteFinal = new Paciente();
+
         conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
         try{
-            String sql = "select * from usuario_hc where cpf_usu = ? and senha_usu = ?";
+            String sql = "select * from usuario_hc usu\n" +
+                    "join paciente_hc pac on usu.cpf_usu = pac.usuar_cpf_fk \n" +
+                    "where cpf_usu = ? and senha_usu = ?";
             ps = conexao.prepareStatement(sql);
             ps.setString(1, paciente.getCpf());
             ps.setString(2, paciente.getSenha());
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return "Usuário logado com sucesso";
-            }else{
-                return "Usuário e/ou senha inválidos";
+                pacienteFinal.setCpf(rs.getString("cpf_usu"));
+                pacienteFinal.setNome(rs.getString("nome_usu"));
+                pacienteFinal.setDataNascimento(rs.getDate("data_nascimento_usu"));
+                pacienteFinal.setEmail(rs.getString("email_usu"));
+                pacienteFinal.setSexo(SexoEnum.valueOf(rs.getString("sexo_usu")));
+                pacienteFinal.setTelefone(rs.getString("telefone_Usu"));
+                pacienteFinal.setSenha(rs.getString("senha_usu"));
+                pacienteFinal.setTipo(TipoUsuarioEnum.valueOf(rs.getString("tipo_usu")));
+
+                pacienteFinal.setNomeMae(rs.getString("nome_mae_pac"));
+                pacienteFinal.setIdPac(rs.getInt("id_pac"));
+
+                EnderecoResponseDto dto = new EnderecoResponseDto();
+                var endereco = endDao.buscarPorId(rs.getInt("id_endereco_fk"));
+                paciente.setEndereco(dto.convertToEndereco(endereco));
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
 
-        return "Usuário não encontrado";
+        return pacienteFinal;
     }
 
     public PacienteMostrarDto mostrarInfos(int id){
