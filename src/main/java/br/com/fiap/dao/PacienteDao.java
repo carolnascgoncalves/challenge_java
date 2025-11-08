@@ -15,17 +15,16 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class PacienteDao {
     private Connection conexao;
     public void cadastrar(Paciente paciente) throws SQLException{
-
         conexao = ConnectionFactory.obterConexao();
+
         String sqlPac = "insert into paciente_hc(usuar_cpf_fk, nome_mae_pac) values(?, ?)";
         String sql = "insert into usuario_hc(cpf_usu,nome_usu,email_usu,sexo_usu,telefone_usu,senha_usu,tipo_usu, data_nascimento_usu, id_endereco_fk)\n" +
                 "values(?,?,?,?,?,?,?,?,?)";
 
         EnderecoDao endDao = new EnderecoDao();
 
-        try (Connection connection = ConnectionFactory.obterConexao();
-             PreparedStatement comandoSQL = connection.prepareStatement(sql);
-             PreparedStatement comandoSQLPac = connection.prepareStatement(sqlPac)){
+        try (PreparedStatement comandoSQL = conexao.prepareStatement(sql);
+             PreparedStatement comandoSQLPac = conexao.prepareStatement(sqlPac)){
 
             comandoSQL.setString(1, paciente.getCpf());
             comandoSQL.setString(2, paciente.getNome());
@@ -103,7 +102,7 @@ public class PacienteDao {
     }
 
     public PacienteMostrarDto mostrarInfos(int id){
-        Connection connection = ConnectionFactory.obterConexao();
+        conexao = ConnectionFactory.obterConexao();
         PacienteMostrarDto paciente = new PacienteMostrarDto();
         PreparedStatement ps = null;
 
@@ -111,7 +110,7 @@ public class PacienteDao {
             String sql = "select usu.cpf_usu, usu.nome_usu from paciente_hc pac\n" +
                     "join usuario_hc usu on usu.cpf_usu = pac.usuar_cpf_fk \n" +
                     "where pac.id_pac = ?";
-            ps = connection.prepareStatement(sql);
+            ps = conexao.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -127,13 +126,13 @@ public class PacienteDao {
     }
 
     public Paciente buscarLoginPac(String cpf){
-        Connection connection = ConnectionFactory.obterConexao();
+        conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
         Paciente paciente = new Paciente();
 
         try{
             String sql = "SELECT * FROM usuario_hc WHERE cpf_usu = ? ";
-            ps = connection.prepareStatement(sql);
+            ps = conexao.prepareStatement(sql);
             ps.setString(1, cpf);
             ResultSet rs = ps.executeQuery();
 
