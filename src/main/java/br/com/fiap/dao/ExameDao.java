@@ -22,11 +22,11 @@ public class ExameDao {
     private Connection conexao;
 
     public void cadastrar(Exame exame) throws SQLException{
+        conexao = ConnectionFactory.obterConexao();
         String sql = "insert into exame_hc(tp_ex,instituicao_ex,id_emissao_fk) \n" +
                 "values(?,?,?)";
 
-        try(Connection conexao = ConnectionFactory.obterConexao();
-            PreparedStatement ps = conexao.prepareStatement(sql)){
+        try(PreparedStatement ps = conexao.prepareStatement(sql)){
 
             Emissao emissao = new Emissao();
             emissao.criarEmissao(exame.getNome(), exame.getMedico(), exame.getPaciente(), exame.getValidade());
@@ -115,6 +115,8 @@ public class ExameDao {
     }
 
     public boolean deletarExame(int idExame, int idPac) throws SQLException{
+        conexao = ConnectionFactory.obterConexao();
+
         Integer idEmissao = null;
         String sqlIdEmissao = "select id_emissao_fk from exame_hc ex\n" +
                 "join emissao_hc em on em.id_em = ex.id_emissao_fk\n" +
@@ -123,8 +125,7 @@ public class ExameDao {
 
         String sqlExame = "delete from exame_hc where id_ex = ?";
 
-        try(Connection conexao = ConnectionFactory.obterConexao();
-            PreparedStatement psIdEmissao = conexao.prepareStatement(sqlIdEmissao);
+        try(PreparedStatement psIdEmissao = conexao.prepareStatement(sqlIdEmissao);
             PreparedStatement psExame = conexao.prepareStatement(sqlExame)){
 
             psIdEmissao.setInt(1, idPac);
@@ -148,6 +149,8 @@ public class ExameDao {
     public void alterarExame(int idExame, int idPac, ExameReagendarDto novoExame) throws SQLException{
         List<Integer> Ids = new ArrayList<>();
 
+        conexao = ConnectionFactory.obterConexao();
+
         String sqlIds = "select ex.id_ex from exame_hc ex\n" +
                 "join emissao_hc em on em.id_em = ex.id_emissao_fk\n" +
                 "join paciente_hc pac on pac.id_pac = em.id_pac_resp_fk\n" +
@@ -162,8 +165,7 @@ public class ExameDao {
                 "  WHERE ex.id_ex = ?\n" +
                 ")";
 
-        try(Connection conexao = ConnectionFactory.obterConexao();
-            PreparedStatement psIds = conexao.prepareStatement(sqlIds);
+        try(PreparedStatement psIds = conexao.prepareStatement(sqlIds);
             PreparedStatement ps = conexao.prepareStatement(sql)){
 
             psIds.setInt(1, idPac);

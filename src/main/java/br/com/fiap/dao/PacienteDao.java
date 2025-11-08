@@ -149,7 +149,7 @@ public class PacienteDao {
 
     public Paciente buscarPac(String cpf){
         EnderecoDao endDao = new EnderecoDao();
-        Connection connection = ConnectionFactory.obterConexao();
+        conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
         Paciente paciente = new Paciente();
 
@@ -157,7 +157,7 @@ public class PacienteDao {
             String sql = "select * from paciente_hc p\n" +
                     "join usuario_hc u on p.usuar_cpf_fk = u.cpf_usu\n" +
                     "where usuar_cpf_fk = ?";
-            ps = connection.prepareStatement(sql);
+            ps = conexao.prepareStatement(sql);
             ps.setString(1, cpf);
             ResultSet rs = ps.executeQuery();
 
@@ -187,7 +187,7 @@ public class PacienteDao {
 
     public Paciente buscarPacId(int id){
         EnderecoDao endDao = new EnderecoDao();
-        Connection connection = ConnectionFactory.obterConexao();
+        conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
         Paciente paciente = new Paciente();
 
@@ -195,7 +195,7 @@ public class PacienteDao {
             String sql = "select * from paciente_hc p\n" +
                     "join usuario_hc u on p.usuar_cpf_fk = u.cpf_usu\n" +
                     "where p.id_pac = ?";
-            ps = connection.prepareStatement(sql);
+            ps = conexao.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -224,11 +224,12 @@ public class PacienteDao {
     }
 
     public String mostrarDocumento(int id) throws SQLException{
+        conexao = ConnectionFactory.obterConexao();
+
         String url = null;
         String sql = "select url_img_pac from paciente_hc where id_pac = ?";
 
-        try(Connection conexao = ConnectionFactory.obterConexao();
-            PreparedStatement ps = conexao.prepareStatement(sql)){
+        try(PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setInt(1, id);
 

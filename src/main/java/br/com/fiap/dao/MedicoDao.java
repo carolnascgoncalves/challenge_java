@@ -16,6 +16,7 @@ public class MedicoDao {
         Medico medico = new Medico();
         PreparedStatement ps = null;
         conexao = ConnectionFactory.obterConexao();
+
         try{
             String sql = "select * from medico_hc m join usuario_hc u on m.usuar_cpf_fk = u.cpf_usu\n" +
                     "where u.nome_usu = ?";
@@ -45,6 +46,7 @@ public class MedicoDao {
         Medico medico = new Medico();
         PreparedStatement ps = null;
         conexao = ConnectionFactory.obterConexao();
+
         try{
             String sql = "select * from medico_hc m\n" +
                     "inner join usuario_hc u on u.cpf_usu = m.usuar_cpf_fk\n" +
