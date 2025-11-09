@@ -48,8 +48,13 @@ public class PacienteResource {
     @GET
     @Path("/{id_paciente}")
     @Produces(MediaType.APPLICATION_JSON)
-    public PacienteMostrarDto mostrarInfos(@PathParam("id_paciente") int id){
-        return pacienteService.mostrarInfos(id);
+    public Response mostrarInfos(@PathParam("id_paciente") int id){
+        if (pacienteService.mostrarInfos(id).getCpf() == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Paciente não encontrado!")
+                    .build();
+        }
+        return Response.ok(pacienteService.mostrarInfos(id)).build();
     }
 
     @POST
