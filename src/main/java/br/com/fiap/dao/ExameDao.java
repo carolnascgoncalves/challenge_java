@@ -21,7 +21,7 @@ public class ExameDao {
     private EmissaoDao emissaoDao = new EmissaoDao();
     private Connection conexao;
 
-    public void cadastrar(Exame exame) throws SQLException{
+    public int cadastrar(Exame exame) throws SQLException{
         conexao = ConnectionFactory.obterConexao();
         String sql = "insert into exame_hc(tp_ex,instituicao_ex,id_emissao_fk) \n" +
                 "values(?,?,?)";
@@ -37,7 +37,15 @@ public class ExameDao {
             ps.setInt(3, idEm);
 
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    exame.setIdEx(rs.getInt(1));
+                }
+            }
         }
+
+        return exame.getIdEx();
     }
 
 

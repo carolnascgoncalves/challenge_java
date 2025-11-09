@@ -16,8 +16,8 @@ public class ExameService {
     @Inject
     ExameDao exameDao;
 
-    public void cadastrar(ExameCadastroDto dto) throws SQLException {
-        exameDao.cadastrar(dto.convertToExame(dto));
+    public int cadastrar(ExameCadastroDto dto) throws SQLException {
+        return exameDao.cadastrar(dto.convertToExame(dto));
     }
 
     public List<ExameResultadosMostrarDto> listar(String tipo, int id) throws SQLException{

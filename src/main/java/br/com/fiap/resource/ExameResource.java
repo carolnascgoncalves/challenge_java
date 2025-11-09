@@ -22,10 +22,8 @@ public class ExameResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response cadastrar(ExameCadastroDto exame){
         try{
-            exameService.cadastrar(exame);
-            return Response.status(Response.Status.CREATED)
-                    .entity("Exame cadastrado com sucesso!")
-                    .build();
+            var id = exameService.cadastrar(exame);
+            return Response.ok(id).build();
         }catch (SQLException e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao cadastrar exame!")
